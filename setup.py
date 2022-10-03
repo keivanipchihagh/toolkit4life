@@ -8,13 +8,13 @@ with open('requirements.txt') as f:
 
 setup(
     name = "toolkit4life",                                      # This is the name of the package
-    version = "0.0.81",                                         # The initial release version
+    version = "0.0.83",                                         # The initial release version
     author = "Keivan Ipchi Hagh",                               # Full name of the author
     url = "https://github.com/keivanipchihagh/toolkit4life",    # URL to the github repository
     description = "Faster deployment is what we want!",
     long_description = long_description,                        # Long description read from the the readme file
     long_description_content_type = "text/markdown",
-    packages = find_namespace_packages(include = ["toolkit4life.*"]),   # List of all python modules to be installed
+    packages = find_namespace_packages(include = ["toolkit4life", "toolkit4life.*"]),   # List of all python modules to be installed
     classifiers = [
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
