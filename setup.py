@@ -1,4 +1,4 @@
-from setuptools import find_packages, setup, find_namespace_packages
+from setuptools import setup, find_namespace_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -8,7 +8,7 @@ with open('requirements.txt') as f:
 
 setup(
     name = "toolkit4life",                                      # This is the name of the package
-    version = "0.0.72",                                         # The initial release version
+    version = "0.0.81",                                         # The initial release version
     author = "Keivan Ipchi Hagh",                               # Full name of the author
     url = "https://github.com/keivanipchihagh/toolkit4life",    # URL to the github repository
     description = "Faster deployment is what we want!",
