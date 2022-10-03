@@ -37,7 +37,7 @@ class ThreadPool():
         # Create threads
         for name, (target, args) in confs.items():
             if args is None: args = ()
-            self.threads.append(Thread(target = target, args = args, name = f"Thread: {name}"))
+            self.threads.append(Thread(target = target, args = args, name = name))
 
 
     def start(self) -> None:
