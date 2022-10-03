@@ -18,45 +18,45 @@ class RedisClient():
         """
 
         # Initialize the redis engine
-        pool = redis.ConnectionPool(
-            host = host,
-            port = port,
-            password = password,
-            decode_responses = True,    # Stringify the values
-            db = db                     # Dedicated database
+        self.engine = redis.Redis(
+            connection_pool = redis.ConnectionPool(
+                host = host,
+                port = port,
+                password = password,
+                decode_responses = True,    # Stringify the values
+                db = db                     # Dedicated database
+            )
         )
-        self.engine = redis.Redis(connection_pool = pool)
 
-        # Test connection
-        self.test_connection()
+        # Test connection and throw error if connection was not successful
+        if self.test_connection() is False:
+            raise Exception("Could not connect to the redis database")
 
         # Clear the database if fresh_start is set to true
-        if fresh_start: self.engine.flushdb()
-
-
-    def inset_dataframe(self, df: DataFrame, key_column: str = "id") -> None:
-        """ Inserts a dataframe to the redis database with the key_column as the key """
-        with self.engine.pipeline() as pipe:
-            for _, row in df.iterrows():
-                pipe.hmset(row[key_column], dict(row))
-            pipe.execute()
+        if fresh_start:
+            self.engine.flushdb()
     
 
+    def close(self) -> None:
+        """ Closes the redis connection """
+        self.engine.close()
+
+
     def get_all_keys(self) -> list:
-        """ All the keys in the redis """
+        """ All the available keys """
         return self.engine.keys("*")
 
 
-    def get_values(self, keys: list) -> list:
-        """ Returns the values of the given keys in the redis """
+    def get_values_from_keys(self, keys: list) -> list:
+        """ Returns the values for the given keys """
         with self.engine.pipeline() as pipe:
             for key in keys:
                 pipe.hgetall(key)
             return [records for records in pipe.execute()]
 
 
-    def delete_from_keys(self, keys: list) -> None:
-        """ Deletes the given keys with Pipeline """
+    def delete_values_from_keys(self, keys: list) -> None:
+        """ Deletes the given keys """
         with self.engine.pipeline() as pipe:
             for key in keys:
                 pipe.delete(key)
@@ -66,3 +66,16 @@ class RedisClient():
     def test_connection(self) -> None:
         """ Tests connection to the redis cache """
         self.engine.ping()
+
+
+    def insert_dict(self, key: str, value: dict) -> None:
+        """ Inserts the given key and a dictionary """
+        self.engine.hmset(key, value)
+
+
+    def inset_dataframe(self, df: DataFrame, key_column: str = "id") -> None:
+        """ Inserts a dataframe to the redis database with the key_column as the key """
+        with self.engine.pipeline() as pipe:
+            for _, row in df.iterrows():
+                pipe.hmset(row[key_column], dict(row))
+            pipe.execute()
