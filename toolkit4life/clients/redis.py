@@ -37,6 +37,11 @@ class RedisClient():
             self.engine.flushdb()
     
 
+    def keys(self, pattern: str) -> list:
+        """ Returns the keys that matches the pattern """
+        return self.engine.keys(pattern)
+
+
     def close(self) -> None:
         """ Closes the redis connection """
         self.engine.close()
