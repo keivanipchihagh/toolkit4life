@@ -8,7 +8,7 @@ with open('requirements.txt') as f:
 
 setup(
     name = "toolkit4life",                                      # This is the name of the package
-    version = "0.1.11",                                         # The initial release version
+    version = "0.1.13",                                         # The initial release version
     author = "Keivan Ipchi Hagh",                               # Full name of the author
     url = "https://github.com/keivanipchihagh/toolkit4life",    # URL to the github repository
     description = "Faster deployment is what we want!",

@@ -19,3 +19,4 @@ SQLAlchemy-Utils==0.38.3
 trino==0.316.0
 urllib3==1.26.12
 wrapt==1.14.1
+PyYAML==6.0
