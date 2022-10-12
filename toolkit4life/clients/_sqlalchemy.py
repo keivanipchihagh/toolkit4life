@@ -1,5 +1,7 @@
 # Standard imports
+import sqlalchemy
 from pandas import DataFrame, read_sql_query
+from sqlalchemy_utils.functions import database_exists, create_database
 
 
 class SQLAlchemy():
@@ -27,11 +29,27 @@ class SQLAlchemy():
     def _select(self, query: str, index_col: str = None) -> DataFrame:
         """ Executes the given query and returns the results as a DataFrame """
         return read_sql_query(sql = query, con = self.engine, index_col = index_col)
-    
+
 
     def _execute(self, query: str) -> None:
         """ Executes the given query """
         self.engine.execute(query)
+
+
+    def table_exists(self, name: str) -> bool:
+        """ Checks if the given table exists in the database """
+        return sqlalchemy.inspect(self.engine).has_table(name)
+
+
+    def create_database_if_not_exists(self, name: str) -> None:
+        """ Creates a new database if not already exists """
+        if not database_exists(self.engine.url):
+            create_database(self.engine.url)
+
+
+    def create_schema_if_not_exists(self, name: str) -> None:
+        """ Creates a new Schema if not already exists """
+        self._execute(f"CREATE SCHEMA IF NOT EXISTS {name}")
 
 
     def _insert(self, df: DataFrame, name: str, if_exists: str = "append", index: bool = False,index_label: str = None) -> None:

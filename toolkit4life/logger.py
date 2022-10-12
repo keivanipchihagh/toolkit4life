@@ -15,24 +15,19 @@ def parametrized(dec):
 
 # Prints status and the time taken to execute the function
 @parametrized
-def status(func: Callable, name: str):
-    """
-        A decorator that logs the function's execution status onto a file
-
-        parameters:
-            name: A name that the function will be logged under
-    """
+def status(func: Callable) -> None:
+    """ A decorator that logs the function's execution status onto a file """
 
     def now() -> datetime: return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     def run(*args, **kwargs):
         try:
-            print(f"[INFO - {now()}] '{name}' started..")
+            print(f"[INFO - {now()}] '{func.__name__}' started..")
             start_time = time()
             func(*args, **kwargs)
-            print(f"[SUCCESS - {now()}] '{name}' executed successfully. (Took {round(time() - start_time, 2)} seconds)")
+            print(f"[SUCCESS - {now()}] '{func.__name__}' executed successfully. (Took {round(time() - start_time, 2)} seconds)")
         except Exception as ex:            
-            print(f"[ERROR - {now()}] '{name}' failed to execute. (details: {ex})")
+            print(f"[ERROR - {now()}] '{func.__name__}' failed to execute. (details: {ex})")
 
     return run
 
