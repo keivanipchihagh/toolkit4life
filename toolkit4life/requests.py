@@ -30,29 +30,29 @@ class BaseRequests():
         self.session.mount('https://', HTTPAdapter(max_retries = retries))
 
 
-    def get(self, url: str, params: dict = {}, headers: dict = None, threaded: bool = False) -> Response:
+    def get(self, url: str, params: dict = {}, headers: dict = None, auth = None, threaded: bool = False) -> Response:
         """ GET request """
-        thread = Thread(target = self.session.get, kwargs = {"url": url, "params": params, "headers": headers, "timeout": self.timeout})
+        thread = Thread(target = self.session.get, kwargs = {"url": url, "params": params, "headers": headers, "auth": auth, "timeout": self.timeout})
         thread.start()
         if not threaded: return thread.join()
 
 
-    def post(self, url: str, json: dict = {}, params: dict = {}, headers: dict = None, threaded: bool = False) -> Response:
+    def post(self, url: str, json: dict = {}, params: dict = {}, headers: dict = None, auth = None, threaded: bool = False) -> Response:
         """ POST request """
-        thread = Thread(target = self.session.post, kwargs = {"url": url, "json": json, "params": params, "headers": headers, "timeout": self.timeout})
+        thread = Thread(target = self.session.post, kwargs = {"url": url, "json": json, "params": params, "headers": headers, "auth": auth, "timeout": self.timeout})
         thread.start()
         if not threaded: return thread.join()
 
 
-    def delete(self, url: str, json: dict = {}, params: dict = {}, headers: dict = None, threaded: bool = False) -> Response:
+    def delete(self, url: str, json: dict = {}, params: dict = {}, headers: dict = None, auth = None, threaded: bool = False) -> Response:
         """ DELETE request """
-        thread = Thread(target = self.session.delete, kwargs = {"url": url, "json": json, "params": params, "headers": headers, "timeout": self.timeout})
+        thread = Thread(target = self.session.delete, kwargs = {"url": url, "json": json, "params": params, "headers": headers, "auth": auth, "timeout": self.timeout})
         thread.start()
         if not threaded: return thread.join()
 
 
-    def put(self, url: str, json: dict = {}, params: dict = {}, headers: dict = None, threaded: bool = False) -> Response:
+    def put(self, url: str, json: dict = {}, params: dict = {}, headers: dict = None, auth = None, threaded: bool = False) -> Response:
         """ PUT request """
-        thread = Thread(target = self.session.put, kwargs = {"url": url, "json": json, "params": params, "headers": headers, "timeout": self.timeout})
+        thread = Thread(target = self.session.put, kwargs = {"url": url, "json": json, "params": params, "headers": headers, "auth": auth, "timeout": self.timeout})
         thread.start()
         if not threaded: return thread.join()

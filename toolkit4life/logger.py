@@ -13,12 +13,12 @@ def parametrized(dec):
     return layer
 
 
+def now() -> datetime: return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
 # Prints status and the time taken to execute the function
 @parametrized
 def status(func: Callable) -> None:
     """ A decorator that logs the function's execution status onto a file """
-
-    def now() -> datetime: return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     def run(*args, **kwargs):
         try:
@@ -45,8 +45,6 @@ def restart_on_crash(func: Callable, name: str, notify_crash: bool = True, retri
             retries: The number of times to retry the function before giving up. If None, the function will be retried forever.
     """
 
-    def now() -> datetime: return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
     def run(*args, **kwargs):
         _retries = 0
         while True:
@@ -62,5 +60,21 @@ def restart_on_crash(func: Callable, name: str, notify_crash: bool = True, retri
             if retries is not None and _retries >= retries:
                 print(f"[ERROR - {now()}] '{name}' crashed too many timee! aborting... (max tries: {retries})")
                 break
+
+    return run
+
+
+
+@parametrized
+def text(func: Callable, on_success: str, on_failure: str) -> None:
+    """ A decorator that prints the time, given message and the execution duration """
+
+    def run(*args, **kwargs):
+        try:
+            start_time = time()
+            func(*args, **kwargs)
+            print(f"SUCCESS - [{now()}] {on_success}. (Took {round(time() - start_time, 2)} seconds)")
+        except Exception as ex:            
+            print(f"[ERROR - {now()}] {on_failure}. (details: {ex})")
 
     return run

@@ -82,12 +82,18 @@ class RedisClient():
 
     def get_dict_all(self) -> dict:
         """ Returns the keys and values as a dictionary """
-        return dict(zip(self.get_all_keys(), self.get_all_values()))
+        return dict(zip(self.get_keys_all(), self.get_values_all()))
 
 
     def get_dict_from_list(self, keys = list) -> dict:
         """ Returns the keys and values as a dictionary """
-        return dict(zip(keys, self.get_values_from_keys(keys)))
+        return dict(zip(keys, self.get_values_from_list(keys)))
+
+
+    def get_dict_from_pattern(self, pattern: str) -> dict:
+        """ Returns the keys and values as a dictionary """
+        keys = self.get_keys_from_pattern(pattern)
+        return dict(zip(keys, self.get_values_from_list(keys)))
 
 
     def delete_values_from_list(self, keys: list) -> None:
