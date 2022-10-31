@@ -49,3 +49,8 @@ class ThreadPool():
     def join(self) -> dict:
         """ Wait for all threads to finish and return a dictionary of name:<return value> """
         return {thread.name: thread.join() for thread in self.threads}
+    
+
+    def start_and_join(self) -> dict:
+        self.start()
+        return self.join()

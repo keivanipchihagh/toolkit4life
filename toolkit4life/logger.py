@@ -17,7 +17,7 @@ def now() -> datetime: return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 # Prints status and the time taken to execute the function
 @parametrized
-def status(func: Callable) -> None:
+def status(func: Callable, name: str) -> None:
     """ A decorator that logs the function's execution status onto a file """
 
     def run(*args, **kwargs):
