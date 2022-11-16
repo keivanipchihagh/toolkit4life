@@ -1,5 +1,6 @@
 # Standard imports
 from sqlalchemy import create_engine
+from urllib.parse import quote_plus as urlquote
 
 # Third-party imports
 from ._sqlalchemy import SQLAlchemy
@@ -28,4 +29,4 @@ class TrinoClient(SQLAlchemy):
     @property
     def connection_string(self) -> str:
         """ Returns the connection string """
-        return f"{self.engine}://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}/{self.schema}"
+        return f"{self.engine}://{self.username}:%s@{self.host}:{self.port}/{self.database}/{self.schema}" % urlquote(self.password)
