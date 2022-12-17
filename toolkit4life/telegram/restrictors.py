@@ -47,7 +47,7 @@ def restrict_by_username(whitelist: list = [], unauthorized_reply_msg: str = Non
             username = update.effective_user.username
 
             if username not in whitelist:
-                print(f"[ACCESS DENIED - {__now}] Unauthorized access denied for '{username}'.")
+                print(f"[ACCESS DENIED - {__now()}] Unauthorized access denied for '{username}'.")
                 update.message.reply_text(unauthorized_reply_msg if unauthorized_reply_msg is not None else f" Sorry, you are not permitted to use this bot.")
                 return
             return func(*args, **kwargs)
@@ -71,7 +71,7 @@ def restrict_by_id(whitelist: list = [], unauthorized_reply_msg: str = None):
             id = update.effective_user.id
 
             if id not in whitelist:
-                print(f"[ACCESS DENIED - {__now}] Unauthorized access denied for '{id}'.")
+                print(f"[ACCESS DENIED - {__now()}] Unauthorized access denied for '{id}'.")
                 update.message.reply_text(unauthorized_reply_msg if unauthorized_reply_msg is not None else f" Sorry, you are not permitted to use this bot.")
                 return
             return func(*args, **kwargs)
