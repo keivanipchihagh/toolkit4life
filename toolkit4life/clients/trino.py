@@ -8,7 +8,7 @@ from ._sqlalchemy import SQLAlchemy
 
 class TrinoClient(SQLAlchemy):
 
-    def __init__(self, host: str, port: str, catalog: str, schema: str, username: str, password: str) -> None:
+    def __init__(self, host: str, port: str, catalog: str, schema: str, username: str, password: str, connect_args: dict = {}) -> None:
         """
             Creates and initializes a PostgreSQL engine instance that connects to the database
 
@@ -19,11 +19,12 @@ class TrinoClient(SQLAlchemy):
                 schema (str): Schema name
                 username (str): Username for authentication/privileges
                 password (str): Password for authentication
+                connect_args (dict): Extrac arguments for the connection to be made
         """
         super().__init__(engine = "trino", host = host, port = port, database = catalog, username = username, password = password)
         self.schema = schema
 
-        self.engine = create_engine(self.connection_string)
+        self.engine = create_engine(self.connection_string, connect_args = connect_args)
 
 
     @property
