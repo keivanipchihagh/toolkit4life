@@ -1,5 +1,3 @@
-# https://stackoverflow.com/questions/1288498/using-the-same-decorator-with-arguments-with-functions-and-methods/1288936#1288936
-
 # Standard imports
 from time import time
 from typing import Callable
@@ -10,11 +8,37 @@ def __now() -> str:
     """ Returns the current datetime as string """
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+
+
 def __run(func: Callable, *args, **kwargs) -> tuple:
     """ Runs the given function with args and kwargs and returns the result and execution time """
     start_time = time()
     result = func(*args, **kwargs)
     return result, round(time() - start_time, 2)
+
+
+
+def info(message: str) -> None:
+    """ Prints a message as Info """
+    print(f"[INFO - {__now()}] {message}")
+
+
+
+def success(message: str) -> None:
+    """ Prints a message as Success """
+    print(f"[SUCCESS - {__now()}] {message}")
+
+
+
+def error(message: str) -> None:
+    """ Prints a message as error """
+    print(f"[ERROR - {__now()}] {message}")
+
+
+
+def warning(message: str) -> None:
+    """ Prints a message as warning """
+    print(f"[WARNING - {__now()}] {message}")
 
 
 
@@ -48,12 +72,12 @@ def status():
     def wrapper(func: Callable):
         def wrapped(*args, **kwargs):
             try:
-                print(f"[INFO - {__now()}] '{func.__name__}' started..")
+                info(f"Executing '{func.__name__}'..")
                 result, duration = __run(func, *args, **kwargs)
-                print(f"[SUCCESS - {__now()}] '{func.__name__}' executed successfully. (Took {duration} seconds)")
+                success(f"Finished executing '{func.__name__}'. (Took {duration} seconds)")
                 return result
             except Exception as ex:            
-                print(f"[ERROR - {__now()}] '{func.__name__}' failed to execute. (details: {ex})")
+                error(f"Failed to execute '{func.__name__}'. (details: {ex})")
         return wrapped
     return wrapper
 
@@ -72,10 +96,10 @@ def text(on_success: str, on_failure: str):
         def wrapped(*args, **kwargs):
             try:
                 result, duration = __run(func, *args, **kwargs)
-                print(f"SUCCESS - [{__now()}] {on_success}. (Took {duration} seconds)")
+                success(f"SUCCESS - [{__now()}] {on_success}. (Took {duration} seconds)")
                 return result
             except Exception as ex:            
-                print(f"[ERROR - {__now()}] {on_failure}. (details: {ex})")
+                error(f"ERROR - [{__now()}] {on_failure}. (details: {ex})")
         return wrapped
     return wrapper
 
@@ -100,33 +124,12 @@ def restart_on_crash(warn_on_exception: bool = True, retries: int = None):
                     if retries is None: raise Exception(ex)
 
                     if warn_on_exception:
-                        print(f"[WARNING - {__now()}] '{func.__name__}' threw an exception! restarting {_retries + 1 }/{retries} ... (details: {ex})")
+                        warning(f"WARNING - [{__now()}] {func.__name__} threw an exception! restarting {_retries + 1 }/{retries} ... (details: {ex})")
                     _retries += 1   # Increment the number of retries
 
                 # Abort the function if the number of retries is greater than the maximum number of retries
                 if _retries >= retries:
-                    print(f"[ERROR - {__now()}] '{func.__name__}' was retried {retries} with no lucks! aborting... (max tries: {retries})")
+                    error(f"'{func.__name__}' threw an exception! aborting... (max tries: {retries})")
                     break
         return wrapped
     return wrapper
-
-
-
-def info(message: str) -> None:
-    """ Prints a message as Info """
-    print(f"[INFO - {__now()}] {message}")
-
-
-def success(message: str) -> None:
-    """ Prints a message as Success """
-    print(f"[SUCCESS - {__now()}] {message}")
-
-
-def error(message: str) -> None:
-    """ Prints a message as error """
-    print(f"[ERROR - {__now()}] {message}")
-
-
-def warning(message: str) -> None:
-    """ Prints a message as warning """
-    print(f"[WARNING - {__now()}] {message}")
