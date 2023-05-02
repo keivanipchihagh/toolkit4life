@@ -25,12 +25,6 @@ class PostgresClient(SQLAlchemy):
         self.engine = create_engine(self.connection_string)
 
 
-    @property
-    def connection_string(self) -> str:
-        """ Returns the connection string """
-        return f"{self.engine}://{self.username}:%s@{self.host}:{self.port}/{self.database}" % urlquote(self.password)
-
-
     def upsert_df(self, df: pd.DataFrame, table_name: str) -> None:
         """
             Implements the equivalent of pd.DataFrame.to_sql(..., if_exists='update') (which does not exist). Creates or updates the db records based on the dataframe records.
@@ -70,3 +64,9 @@ class PostgresClient(SQLAlchemy):
             SET {update_column_stmt};
         """)
         self.engine.execute(f"DROP TABLE {temp_table_name}")
+
+
+    @property
+    def connection_string(self) -> str:
+        """ Returns the connection string """
+        return f"{self.engine}://{self.username}:%s@{self.host}:{self.port}/{self.database}" % urlquote(self.password)
